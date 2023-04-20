@@ -106,16 +106,16 @@
                 <li class="list-header">
                     <div class="count">총 학생 수: ${sList.size()}명</div>
                     <div class="sort-link-group">
-                        <div><a href="#">학번순</a></div>
-                        <div><a href="#">이름순</a></div>
-                        <div><a href="#">평균순</a></div>
+                        <div><a href="/score/list?sort=num">학번순</a></div>
+                        <div><a href="/score/list?sort=name">이름순</a></div>
+                        <div><a href="/score/list?sort=avg">평균순</a></div>
                     </div>
 
                 </li>
 
                 <c:forEach var="s" items="${sList}">
                     <li>
-                        # 학번: ${s.stuNum}, 이름: <a href="#">${s.name}</a>, 
+                        # 학번: ${s.stuNum}, 이름: <a href="/score/detail?stuNum=${s.stuNum}">${s.name}</a>, 
                         국어: ${s.kor}점, 영어: ${s.eng}점, 수학: ${s.math}점, 
                         총점: ${s.total}점, 평균: ${s.average}점, 학점: ${s.grade}
                         <a class="del-btn" href="/score/remove?stuNum=${s.stuNum}">삭제</a>
@@ -131,23 +131,22 @@
     </div>
 
     <script>
-        // const $ul = document.querySelector('.score-list');
+        const $ul = document.querySelector('.score-list');
 
-        // $ul.addEventListener('click', e => {
-        //     if (!e.target.matches('a.del-btn')) return;
+        $ul.addEventListener('click', e => {
+            if (!e.target.matches('a.del-btn')) return;
 
-        //     e.preventDefault();
-        //     //console.log('클릭이벤트 발동!');
+            e.preventDefault(); // a태그 기본기능 정지
+            //console.log('클릭이벤트 발동!');
 
-        //     if (confirm('정말로 삭제하시겠습니까?')) {
-        //         //삭제 진행
-        //         window.location.href = e.target.getAttribute('href');
-        //     } else {
-        //         //삭제 취소
-        //         return;
-        //     }
-
-        // });
+            if (confirm('정말로 삭제하시겠습니까?')) {
+                //삭제 진행
+                window.location.href = e.target.getAttribute('href');
+            } else {
+                //삭제 취소
+                return;
+            }
+        });
 
         //홈화면으로 버튼 이벤트
         const $homeBtn = document.getElementById('go-home');
