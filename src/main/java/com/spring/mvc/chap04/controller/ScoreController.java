@@ -1,13 +1,10 @@
 package com.spring.mvc.chap04.controller;
 
+import com.spring.mvc.chap04.dto.ScoreListResponseDTO;
 import com.spring.mvc.chap04.dto.ScoreRequestDTO;
 import com.spring.mvc.chap04.entity.Score;
-import com.spring.mvc.chap04.repository.ScoreRepository;
-import com.spring.mvc.chap04.repository.ScoreRepositoryImpl;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
+import com.spring.mvc.chap04.service.ScoreService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,9 +27,6 @@ import java.util.List;
 
     4. 성적정보 상세 조회 요청
     - /score/detail : GET
-
-    5. 성적정보 수정하기 요청
-    - /score/change : GET
  */
 @Controller
 @RequestMapping("/score")
@@ -41,7 +35,8 @@ import java.util.List;
 public class ScoreController {
 
     // 저장소에 의존해야 데이터를 받아서 클라이언트에게 응답할 수 있음
-    private final ScoreRepository repository;
+//    private final ScoreRepository repository;
+    private final ScoreService scoreService;
 
     // 만약에 클래스의 생성자가 단 1개라면
     // 자동으로 @Autowired를 써줌
@@ -58,12 +53,19 @@ public class ScoreController {
         System.out.println("/score/list : GET!");
         System.out.println("정렬 요구사항: " + sort);
 
-        List<Score> scoreList = repository.findAll(sort);
-        model.addAttribute("sList", scoreList);
+        List<ScoreListResponseDTO> responseDTOList
+                = scoreService.getList(sort);
+
+//        List<ScoreListResponseDTO> responseDTOList = new ArrayList<>();
+//        for (Score s : scoreList) {
+//            ScoreListResponseDTO dto = new ScoreListResponseDTO(s);
+//            responseDTOList.add(dto);
+//        }
+
+        model.addAttribute("sList", responseDTOList);
 
         return "chap04/score-list";
     }
-
     // 2. 성적 정보 등록 처리 요청
     @PostMapping("/register")
     public String register(ScoreRequestDTO dto) {
@@ -71,11 +73,8 @@ public class ScoreController {
         // 입력데이터(쿼리스트링) 읽기
         System.out.println("/score/register : POST! - " + dto);
 
-        // dto(ScoreDTO)를 entity(Score)로 변환해야 함.
-        Score score = new Score(dto);
+        scoreService.insertScore(dto);
 
-        // save명령
-        repository.save(score);
         /*
             등록요청에서 JSP 뷰 포워딩을 하면
             갱신된 목록을 다시한번 저장소에서 불러와
@@ -87,62 +86,48 @@ public class ScoreController {
          */
         return "redirect:/score/list";
     }
-
     // 3. 성적정보 삭제 요청
     @GetMapping("/remove")
     public String remove(int stuNum) {
         System.out.println("/score/remove : GET!");
 
-        repository.deleteByStuNum(stuNum);
+        scoreService.delete(stuNum);
 
         return "redirect:/score/list";
     }
-
     // 4. 성적정보 상세 조회 요청
     @GetMapping("/detail")
     public String detail(int stuNum, Model model) {
         System.out.println("/score/detail : GET!");
-
-        Score score = repository.findByStuNum(stuNum);
-        model.addAttribute("s", score);
+        retrieve(stuNum, model);
         return "chap04/score-detail";
     }
 
-    @GetMapping("/update")
-    public String change(int stuNum,Model model){
 
-        Score score = repository.findByStuNum(stuNum);
-        model.addAttribute("s",score);
+    // 5. 수정 화면 열어주기
+    @GetMapping("/modify")
+    public String modify(int stuNum, Model model) {
+        System.out.println("/score/modify : GET!");
+        retrieve(stuNum, model);
         return "chap04/score-modify";
     }
 
-    //        5. 성적정보 수정하기 요청
-    @PostMapping("/modify")
-    public String modify(int kor,int eng,int math,int stuNum,Model model) {
-        System.out.println("/score/modify : GET!");
-        Score score = repository.findByStuNum(stuNum);
-        score.setKor(kor);
-        score.setMath(math);
-        score.setEng(eng);
-        score.calcTotalAndAvg();
-
+    private void retrieve(int stuNum, Model model) {
+        Score score = scoreService.retrieve(stuNum);
         model.addAttribute("s", score);
-        return "redirect:/score/detail?stuNum=" + stuNum ;
-//        return "chap04/score-detail";
     }
 
+    // 6. 수정 완료 처리하기
     @PostMapping("/modify")
-    public String modify(ScoreRequestDTO dto,Model model,int stuNum) {
-//        Score score = repository.findByStuNum(stuNum);
-        Score score = new Score(dto);
-        repository.save(score);
-        Score score1 = repository.modifyByStuNum(dto);
+    public String modify(int stuNum, ScoreRequestDTO dto) {
+        System.out.println("/score/modify : POST!");
 
-        System.out.println("/score/modify : GET!");
+        Score score = scoreService.retrieve(stuNum);
+        score.changeScore(dto);
 
-
-        model.addAttribute("s", score1);
-        return "redirect:/score/detail?stuNum=" + stuNum ;
-//        return "chap04/score-detail";
+        return "redirect:/score/detail?stuNum=" + stuNum; // 상세보기페이지로 리다이렉트
     }
+
+
+
 }
