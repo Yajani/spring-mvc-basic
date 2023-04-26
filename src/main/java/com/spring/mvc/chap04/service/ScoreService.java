@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 // 컨트롤러와 레파지토리 사이 비즈니스 로직 처리
 // ex) 트랜잭션 처리, 예외처리, dto변환처리
@@ -34,11 +35,11 @@ public class ScoreService {
 
         // scoreList에서 원하는 정보만 추출하고 이름을 마스킹해서
         // 다시 DTO리스트로 변환해줘야 한다.
-//        return scoreRepository.findAll(sort)
-//                    .stream()
-//                    .map(ScoreListResponseDTO::new)
-//                    .collect(Collectors.toList());
-        return null;
+        return scoreRepository.findAll(sort)
+                .stream()
+                .map(ScoreListResponseDTO::new)
+                .collect(Collectors.toList());
+
     }
 
 
