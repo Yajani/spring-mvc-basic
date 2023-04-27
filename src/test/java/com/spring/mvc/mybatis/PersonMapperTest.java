@@ -6,6 +6,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
@@ -30,12 +32,12 @@ class PersonMapperTest {
     }
 
     @Test
-    @DisplayName("마이바티스 매퍼로 사람정보 저장에 성공해야 한다.")
+    @DisplayName("마이바티스 매퍼로 사람정보 수정에 성공해야 한다.")
     void changeTest() {
         //given
         Person p = Person.builder()
                 .personName("마바수정")
-                .personAge(38)
+                .personAge(88)
                 .id(3L)
                 .build();
         // when
@@ -46,7 +48,7 @@ class PersonMapperTest {
     }
 
     @Test
-    @DisplayName("마이바티스 매퍼로 사람정보 저장에 성공해야 한다.")
+    @DisplayName("마이바티스 매퍼로 사람정보 삭제에 성공해야 한다.")
     void removeTest() {
         //given
         long id = 6L;
@@ -55,4 +57,33 @@ class PersonMapperTest {
         //then
         assertTrue(flag);
     }
+
+    @Test
+    @DisplayName("마이바티스 매퍼로 사람정보 전체조회에 성공해야 한다.")
+    void findAllTest() {
+        //given
+
+        // when
+        List<Person> people = mapper.findAll();
+        //then
+        for (Person person : people) {
+            System.out.println(person);
+        }
+        assertEquals(8, people.size());
+    }
+
+    @Test
+    @DisplayName("마이바티스 매퍼로 사람정보 개별조회에 성공해야 한다.")
+    void findOneTest() {
+        //given
+        long id = 5L;
+        // when
+        Person p = mapper.findOne(id);
+        //then
+        System.out.println("p = " + p);
+        assertEquals("김스프링", p.getPersonName());
+        assertEquals(2, p.getPersonAge());
+        assertNotNull(p);
+    }
+
 }

@@ -24,11 +24,13 @@ class EmployeeTest {
 
         System.out.println("e = " + e);
 
+
         Actor actor = Actor.builder()
                 .actorName("장동건")
                 .hasPhone(false)
                 .actorAge(40)
                 .build();
+
     }
 
 }

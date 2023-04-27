@@ -13,7 +13,4 @@ public class Actor {
     private int actorAge;
     private boolean hasPhone;
 
-
-
-
 }
