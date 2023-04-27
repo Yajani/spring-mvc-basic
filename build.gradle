@@ -34,7 +34,8 @@ dependencies {
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-jdbc'
     //마리아디비 커넥터
     implementation 'org.mariadb.jdbc:mariadb-java-client:3.0.8'
-
+// https://mvnrepository.com/artifact/org.mybatis.spring.boot/mybatis-spring-boot-starter
+    implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:2.2.2'
 }
 
 tasks.named('test') {
