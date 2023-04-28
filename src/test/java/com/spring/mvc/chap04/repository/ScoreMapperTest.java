@@ -18,7 +18,7 @@ class ScoreMapperTest {
     void saveTest(){
         //given
         Score score = Score.builder()
-                .name("꺄륵끽")
+                .stuName("꺄륵끽")
                 .kor(99)
                 .eng(80)
                 .math(100)
