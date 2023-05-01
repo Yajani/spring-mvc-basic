@@ -1,5 +1,9 @@
 package com.spring.mvc.chap05.dto.page;
 
+import lombok.Getter;
+import lombok.ToString;
+
+@Getter @ToString
 public class PageMaker {
 
     // 한번에 그려낼 페이지 수
@@ -19,6 +23,12 @@ public class PageMaker {
     // 총 게시물 수
     private int totalCount;
 
+
+    public PageMaker(Page page, int totalCount) {
+        this.page = page;
+        this.totalCount = totalCount;
+        makePageInfo();
+    }
 
     // 페이지 계산 알고리즘
     private void makePageInfo() {

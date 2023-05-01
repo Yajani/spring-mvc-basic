@@ -19,6 +19,8 @@
 
     <!-- bootstrap css -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+
     <link rel="stylesheet" href="/assets/css/main.css">
     <link rel="stylesheet" href="/assets/css/list.css">
 
@@ -66,28 +68,35 @@
 
 
         </div>
-<!-- 게시글 목록 하단 영역 -->
-<div class="bottom-section">
+        <!-- end card container -->
 
-    <!-- 페이지 버튼 영역 -->
-    <nav aria-label="Page navigation example">
-        <ul class="pagination pagination-lg pagination-custom">
+        <!-- 게시글 목록 하단 영역 -->
+        <div class="bottom-section">
 
-            
-            <li class="page-item"><a class="page-link" href="#">prev</a></li>
-            
+            <!-- 페이지 버튼 영역 -->
+            <nav aria-label="Page navigation example">
+                <ul class="pagination pagination-lg pagination-custom">
 
-            
-            <li data-page-num="1" class="page-item">
-                <a class="page-link" href="/board/list?pageNo=1">1</a>
-            </li>            
+                    
+                    <c:if test="${maker.prev}">
+                        <li class="page-item"><a class="page-link" href="/board/list?pageNo=${maker.begin - 1}">prev</a></li>
+                    </c:if>
 
-            <li class="page-item"><a class="page-link" href="#">next</a></li>
-            
-        </ul>
-    </nav>
+                    <c:forEach var="i" begin="${maker.begin}" end="${maker.end}">
+                        <li data-page-num="${i}" class="page-item">
+                            <a class="page-link" href="/board/list?pageNo=${i}">${i}</a>
+                        </li>
+                    </c:forEach>
+                    
+                    
+                    <c:if test="${maker.next}">
+                        <li class="page-item"><a class="page-link" href="/board/list?pageNo=${maker.end + 1}">next</a></li>
+                    </c:if>
+                </ul>
+            </nav>
 
-</div>        
+        </div>
+    </div>
 
     </div>
 
@@ -200,6 +209,29 @@
         };
 
         
+        //현재 위치한 페이지에 active 스타일 부여하기
+        function appendPageActive() {
+
+            // 현재 내가 보고 있는 페이지 넘버
+            const curPageNum = '${maker.page.pageNo}';
+            // console.log("현재페이지: ", curPageNum);
+
+            // 페이지 li태그들을 전부 확인해서 
+            // 현재 위치한 페이지 넘버와 텍스트컨텐츠가 일치하는
+            // li를 찾아서 class active 부여
+            const $ul = document.querySelector('.pagination');
+
+            for (let $li of [...$ul.children]) {
+                if (curPageNum === $li.dataset.pageNum) {
+                    $li.classList.add('active');
+                    break;
+                }
+            }
+
+        }
+
+        appendPageActive();
+
 
     </script>
 
