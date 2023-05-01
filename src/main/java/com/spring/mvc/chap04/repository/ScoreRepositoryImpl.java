@@ -47,10 +47,12 @@ public class ScoreRepositoryImpl implements ScoreRepository {
 
     @Override
     public List<Score> findAll(String sort) {
-        Comparator<Score> comparator = comparing(Score::getStuNum);
+        Comparator<Score> comparator = comparing(score -> {
+            return score.getStuNum();
+        });
         switch (sort) {
             case "num":
-                comparator = comparing(Score::getStuNum);
+                comparator = comparing(score -> score.getStuNum());
                 break;
             case "name":
                 comparator = comparing(Score::getStuName);
