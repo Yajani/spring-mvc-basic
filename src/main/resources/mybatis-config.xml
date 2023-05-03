@@ -5,6 +5,7 @@
 <configuration>
     <settings>
         <!--   자동 카멜케이스 스네이크 케이스 변환 설정     -->
+<!--        resultmap을 안쓰기위해서 DB랑 자바변수랑 연결을 해준다 -->
         <setting name="mapUnderscoreToCamelCase" value="true" />
     </settings>
 

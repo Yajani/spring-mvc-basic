@@ -44,11 +44,12 @@ public class RestApiController {
         return ResponseEntity.ok().body(personList);
     }
 
+    //리턴타입은 모두 ResponseEntity<?>
     @GetMapping("/bmi")
     public ResponseEntity<?> bmi(
             @RequestParam(required = false) Double cm,
             @RequestParam(required = false) Double kg) {
-
+//@RequestParam은 /bmi하고 ?로 받아오는것 ?cm = ?&kg=?
         if (cm == null || kg == null) {
             return ResponseEntity.badRequest().body("키랑 몸무게 보내 이새갸");
         }
@@ -56,7 +57,7 @@ public class RestApiController {
         double bmi = kg / (cm / 100) * (cm / 100);
 
         HttpHeaders headers = new HttpHeaders();
-        headers.add("fruits", "melon");
+        headers.add("fruits", "melon"); //추가적인 정보
         headers.add("hobby", "soccer");
 
         return ResponseEntity

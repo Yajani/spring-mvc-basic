@@ -16,8 +16,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
 
-@Controller
-@RequiredArgsConstructor //생성자 만들기
+@Controller //디스패처서블릿 주입 받기
+@RequiredArgsConstructor //생성자 만들기(의존성 주입하기)
 @RequestMapping("/board") // 공동 url
 @Slf4j
 public class BoardController {
@@ -36,7 +36,7 @@ public class BoardController {
         // 페이징 알고리즘 작동
         PageMaker maker = new PageMaker(page, boardService.getCount(page));
 
-        model.addAttribute("bList", responseDTOS);
+        model.addAttribute("bList", responseDTOS); //JSP에게 bList란 이름으로 전달
         model.addAttribute("maker", maker);
         model.addAttribute("s",page);
 

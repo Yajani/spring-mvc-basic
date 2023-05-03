@@ -9,6 +9,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 // 클라이언트에게 게시글 목록을 줄 때 스펙
+//DB에 저장된 데이터를 클라이언트에게 넘겨줄떄의 스펙
 @Getter @ToString
 @EqualsAndHashCode
 public class BoardListResponseDTO {

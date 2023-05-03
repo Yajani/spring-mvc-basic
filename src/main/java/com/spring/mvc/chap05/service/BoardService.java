@@ -13,8 +13,8 @@ import java.util.List;
 
 import static java.util.stream.Collectors.toList;
 
-@Service
-@RequiredArgsConstructor
+@Service //controller주입을 위한 것
+@RequiredArgsConstructor //생성자 주입
 public class BoardService {
 
     //    private final BoardRepository boardRepository;
@@ -29,6 +29,7 @@ public class BoardService {
                 .map(BoardListResponseDTO::new)
                 .collect(toList())
                 ;
+        //원본 board를 dto로 변환하고 있다.
     }
 
     // 글 등록 중간처리
