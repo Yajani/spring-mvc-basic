@@ -1,8 +1,11 @@
 package com.spring.mvc.chap06;
 
 import com.spring.mvc.jdbc.Person;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -32,10 +35,33 @@ public class RestApiController {
     }
 
     @GetMapping("/person-list")
-    public List<Person> personList() {
+    public ResponseEntity<?> personList() {
         Person p = new Person(1L, "루피", 3);
         Person p2 = new Person(2L, "딸긔겅듀", 4);
         Person p3 = new Person(3L, "뽀롤로", 5);
-        return List.of(p, p2, p3);
+        List<Person> personList = List.of(p, p2, p3);
+
+        return ResponseEntity.ok().body(personList);
+    }
+
+    @GetMapping("/bmi")
+    public ResponseEntity<?> bmi(
+            @RequestParam(required = false) Double cm,
+            @RequestParam(required = false) Double kg) {
+
+        if (cm == null || kg == null) {
+            return ResponseEntity.badRequest().body("키랑 몸무게 보내 이새갸");
+        }
+
+        double bmi = kg / (cm / 100) * (cm / 100);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("fruits", "melon");
+        headers.add("hobby", "soccer");
+
+        return ResponseEntity
+                .ok()
+                .headers(headers)
+                .body(bmi);
     }
 }

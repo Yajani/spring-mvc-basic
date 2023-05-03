@@ -18,6 +18,10 @@ public class Page {
         this.amount = 6;
     }
 
+    public Page(int pageNo) {
+
+    }
+
     public void setPageNo(int pageNo) {
         if(pageNo < 1 || pageNo > Integer.MAX_VALUE){
             this.pageNo = 1;
