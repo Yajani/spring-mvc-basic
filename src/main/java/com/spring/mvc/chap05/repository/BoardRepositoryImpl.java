@@ -19,7 +19,7 @@ public class BoardRepositoryImpl
         implements BoardRepository {
 
     private final static Map<Integer, Board> boardMap;
-    private static int sequence;
+    private static int sequence; //일련번호 만들기
 
     static {
         boardMap = new HashMap<>();

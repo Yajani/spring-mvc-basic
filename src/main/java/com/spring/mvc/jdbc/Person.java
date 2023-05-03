@@ -22,5 +22,5 @@ public class Person {
         this.id = rs.getLong("id");
         this.personName = rs.getString("person_name");
         this.personAge = rs.getInt("person_age");
-    }
+    } //mybatis쓰면 이게 필요없음!!!
 }

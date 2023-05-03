@@ -17,12 +17,13 @@ import java.util.stream.Collectors;
 public class ScoreService {
 
     //    private final ScoreRepository scoreRepository;
-    private final ScoreMapper scoreRepository;
+    private final ScoreMapper scoreRepository; //Mapper로 레파지토리를 변경한다.
 
     @Autowired
     public ScoreService(ScoreMapper scoreRepository) {
         this.scoreRepository = scoreRepository;
     }
+    //mapper인터페이스와 AutoWired로 자동연결하기
 
     // 목록조회 중간처리
     /*
@@ -32,7 +33,6 @@ public class ScoreService {
         컨트롤러는 정보를 일부만 받았으면 좋겠다.
      */
     public List<ScoreListResponseDTO> getList(String sort) {
-
         // scoreList에서 원하는 정보만 추출하고 이름을 마스킹해서
         // 다시 DTO리스트로 변환해줘야 한다.
         return scoreRepository.findAll(sort)

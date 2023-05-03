@@ -20,6 +20,7 @@ public class BoardListResponseDTO {
     private final int viewCount;
 
     public BoardListResponseDTO(Board board) {
+        //글 번호는 원본 번호 그대로 세팅
         this.boardNo = board.getBoardNo();
         this.shortTitle = makeShortTitle(board.getTitle());
         this.shortContent = makeShortContent(board.getContent());

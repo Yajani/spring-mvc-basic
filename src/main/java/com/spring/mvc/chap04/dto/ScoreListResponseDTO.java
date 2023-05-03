@@ -25,9 +25,9 @@ public class ScoreListResponseDTO {
 
     // 첫글자만 뺴고 다 *처리 하기
     private String makeMaskingName(String originalName) {
-        String maskingName = String.valueOf(originalName.charAt(0));
+        String maskingName = String.valueOf(originalName.charAt(0)); //첫글자
         for (int i = 1; i < originalName.length(); i++) {
-            maskingName += "*";
+            maskingName += "*"; //첫글자뺴고 다 * 처리하기
         }
         return maskingName;
     }

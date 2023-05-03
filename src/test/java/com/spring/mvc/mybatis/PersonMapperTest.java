@@ -38,7 +38,7 @@ class PersonMapperTest {
         Person p = Person.builder()
                 .personName("마바수정")
                 .personAge(88)
-                .id(3L)
+                .id(3L)  //3번줄을 수정하겠다!!
                 .build();
         // when
         boolean flag = mapper.change(p);
@@ -83,7 +83,7 @@ class PersonMapperTest {
         System.out.println("p = " + p);
         assertEquals("김스프링", p.getPersonName());
         assertEquals(2, p.getPersonAge());
-        assertNotNull(p);
+        assertNotNull(p); //null이 아닐거야~
     }
 
 }
