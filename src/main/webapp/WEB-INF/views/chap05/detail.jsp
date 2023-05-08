@@ -93,6 +93,21 @@
         button.list-btn:hover {
             background: #e61e8c93;
         }
+
+        /* 페이지 css */
+        /* 페이지 액티브 기능 */
+        .pagination .page-item.p-active a {
+            background: #333 !important;
+            color: #fff !important;
+            cursor: default;
+            pointer-events: none;
+        }
+
+        .pagination .page-item:hover a {
+            background: #888 !important;
+            color: #fff !important;
+        }
+
     </style>
 </head>
 <body>
@@ -200,18 +215,75 @@
         
     </div>
 
+
     <script>
-        //댓글 관련 스크립트
-        //원본 글 번호
+        // 댓글 관련 스크립트
+        // 원본 글 번호
         const bno = '${b.boardNo}';
 
-        //댓글 요청 URI
-        const URI = '/api/v1/replies';
+        // 댓글 요청 URI
+        const URL = '/api/v1/replies';
+
+        // 페이지 렌더링 함수
+        function renderPage({
+            begin, end, prev, next, page, finalPage
+        }) {
+
+            let tag = "";
+
+            //이전 버튼 만들기
+            if (prev) {
+                tag += "<li class='page-item'><a class='page-link page-active' href='" + (begin - 1) +
+                    "'>이전</a></li>";
+            }
+            //페이지 번호 리스트 만들기
+            for (let i = begin; i <= end; i++) {
+                let active = '';
+                if (page.pageNo === i) {
+                    active = 'p-active';
+                }
+
+                tag += "<li class='page-item " + active + "'><a class='page-link page-custom' href='" + i +
+                    "'>" + i + "</a></li>";
+            }
+            //다음 버튼 만들기
+            if (next) {
+                tag += "<li class='page-item'><a class='page-link page-active' href='" + (end + 1) +
+                    "'>다음</a></li>";
+            }
+
+            // 페이지태그 렌더링
+            const $pageUl = document.querySelector('.pagination');
+            $pageUl.innerHTML = tag;
+
+            // ul에 마지막페이지 번호 저장.
+            $pageUl.dataset.fp = finalPage;
+
+        }
+
+        // 페이지 클릭 이벤트 핸들러
+        function makePageButtonClickEvent() {
+            // 페이지 버튼 클릭이벤트 처리
+            const $pageUl = document.querySelector('.pagination');
+            $pageUl.onclick = e => {
+                if (!e.target.matches('.page-item a')) return;
+
+                e.preventDefault(); // 태그의 기본 동작 중단
+
+                // 누른 페이지 번호 가져오기
+                const pageNum = e.target.getAttribute('href');
+                // console.log(pageNum);
+
+                // 페이지 번호에 맞는 목록 비동기 요청
+                getReplyList(pageNum);
+            };
+        }
+
 
         // 댓글 목록 렌더링 함수
         function renderReplyList({
             count, pageInfo, replies
-         }) {
+        }) {
 
             // 총 댓글 수 렌더링
             document.getElementById('replyCnt').textContent = count;
@@ -255,25 +327,103 @@
             // 생성된 댓글 tag 렌더링
             document.getElementById('replyData').innerHTML = tag;
 
+            // 페이지 렌더링
+            renderPage(pageInfo);
+
         }
 
-        //댓글 목록 불러오기 함수
-        function getReplyList(page=1){
-            
-            fetch(URL + '/' + bno + '/page/'+page)
+
+        // 댓글 목록 불러오기 함수 
+        function getReplyList(page=1) {
+
+            fetch(`\${URL}/\${bno}/page/\${page}`)
                 .then(res => res.json())
                 .then(responseResult => {
                     // console.log(responseResult);
                     renderReplyList(responseResult);
-                })
+                });
         }
 
-        // =========== 메인 실행부 ============//
-        (function(){
-            //첫 댓글 페이지 불러오기
+// 댓글 등록 처리 이벤트 함수
+function makeReplyRegisterClickEvent() {
+
+const $regBtn = document.getElementById('replyAddBtn');
+
+$regBtn.onclick = e => {
+
+    const $rt = document.getElementById('newReplyText');
+    const $rw = document.getElementById('newReplyWriter');
+
+    // console.log($rt.value);
+    // console.log($rw.value);
+
+
+    // 클라이언트 입력값 검증
+    if ($rt.value.trim() === '') {
+        alert('댓글 내용은 필수입니다!');
+        return;
+    }
+
+    else if ($rw.value.trim() === '') {
+        alert('댓글 작성자 이름은 필수입니다!');
+        return;
+    }
+    else if ($rw.value.trim().length() < 2 || $rw.value.trim().length() > 8) {
+        alert('댓글 작성자 이름은 2~8자 사이로 작성하세요!');
+        return;
+    }
+
+
+    // # 서버로 보낼 데이터
+    const payload = {
+        text: $rt.value,
+        author: $rw.value,
+        bno: bno
+    };
+
+    // # GET방식을 제외하고 필요한 객체
+    const requestInfo = {
+        method: 'POST',
+        headers: {
+            'content-type': 'application/json'
+        },
+        body: JSON.stringify(payload)
+    };
+
+    // # 서버에 POST요청 보내기
+    fetch(URL, requestInfo)
+        .then(res => {
+            if (res.status === 200) {
+                alert('댓글이 정상 등록됨!');
+                // 입력창 비우기
+                $rt.value = '';
+                $rw.value = '';
+
+                // 마지막페이지 번호
+                const lastPageNo = document.querySelector('.pagination').dataset.fp;
+                getReplyList(lastPageNo);
+            } else {
+                alert('댓글 등록에 실패함!');
+            }
+        });
+};
+}
+
+        //========= 메인 실행부 =========//
+        (function() {
+
+            // 첫 댓글 페이지 불러오기
             getReplyList();
 
+            // 페이지 버튼 이벤트 등록
+            makePageButtonClickEvent();
+
+            // 댓글 등록 이벤트 등록
+            makeReplyRegisterClickEvent();
+
         })();
+
     </script>
+
 </body>
 </html>
