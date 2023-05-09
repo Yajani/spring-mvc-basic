@@ -2,7 +2,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html lang="ko">
-
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -10,8 +9,10 @@
     <title>게시판 글쓰기</title>
 
     <%@ include file="../include/static-head.jsp" %>
-
+    
     <style>
+        
+        
         .form-container {
             width: 500px;
             margin: auto;
@@ -21,7 +22,6 @@
             border-radius: 4px;
             font-size: 18px;
         }
-
         .form-container h1 {
             font-size: 40px;
             font-weight: 700;
@@ -30,21 +30,18 @@
             margin-bottom: 20px;
             color: #ffffff;
         }
-
         .form-container h2 {
             font-size: 30px;
             color: #222;
             text-align: center;
             margin-bottom: 20px;
         }
-
         label {
             display: block;
             margin-bottom: 5px;
             font-size: 20px;
         }
-
-        #title {
+        #title{
             font-size: 18px;
             width: 100%;
             padding: 8px;
@@ -54,7 +51,6 @@
             margin-bottom: 10px;
             background-color: rgba(255, 255, 255, 0.8);
         }
-
         #content {
             height: 400px;
             font-size: 18px;
@@ -71,13 +67,11 @@
             resize: none;
             height: 200px;
         }
-
         .buttons {
             display: flex;
             justify-content: flex-end;
             margin-top: 20px;
         }
-
         button {
             font-size: 20px;
             padding: 10px 20px;
@@ -90,15 +84,12 @@
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
             transition: background-color 0.3s;
         }
-
         button.list-btn {
             background: #e61e8c;
         }
-
         button:hover {
             background-color: #3d8b40;
         }
-
         button.list-btn:hover {
             background: #e61e8c93;
         }
@@ -116,9 +107,9 @@
             background: #888 !important;
             color: #fff !important;
         }
+
     </style>
 </head>
-
 <body>
 
     <%@ include file="../include/header.jsp" %>
@@ -131,8 +122,7 @@
         <label for="content">내용</label>
         <div id="content">${b.content}</div>
         <div class="buttons">
-            <button class="list-btn" type="button"
-                onclick="window.location.href='/board/list?pageNo=${s.pageNo}&type=${s.type}&keyword=${s.keyword}'">목록</button>
+            <button class="list-btn" type="button" onclick="window.location.href='/board/list?pageNo=${s.pageNo}&type=${s.type}&keyword=${s.keyword}'">목록</button>
         </div>
 
         <!-- 댓글 영역 -->
@@ -153,9 +143,11 @@
                             <div class="col-md-3">
                                 <div class="form-group">
                                     <label for="newReplyWriter" hidden>댓글 작성자</label>
-                                    <input id="newReplyWriter" name="replyWriter" type="text" class="form-control"
-                                        placeholder="작성자 이름" style="margin-bottom: 6px;">
-                                    <button id="replyAddBtn" type="button" class="btn btn-dark form-control">등록</button>
+                                    <input id="newReplyWriter" name="replyWriter" type="text"
+                                         class="form-control" placeholder="작성자 이름"
+                                         style="margin-bottom: 6px;">
+                                    <button id="replyAddBtn" type="button"
+                                        class="btn btn-dark form-control">등록</button>
                                 </div>
                             </div>
                         </div>
@@ -220,7 +212,7 @@
         </div>
 
         <!-- end replyModifyModal -->
-
+        
     </div>
 
 
@@ -234,12 +226,7 @@
 
         // 페이지 렌더링 함수
         function renderPage({
-            begin,
-            end,
-            prev,
-            next,
-            page,
-            finalPage
+            begin, end, prev, next, page, finalPage
         }) {
 
             let tag = "";
@@ -295,9 +282,7 @@
 
         // 댓글 목록 렌더링 함수
         function renderReplyList({
-            count,
-            pageInfo,
-            replies
+            count, pageInfo, replies
         }) {
 
             // 총 댓글 수 렌더링
@@ -313,12 +298,7 @@
             } else {
                 for (let rep of replies) {
 
-                    const {
-                        rno,
-                        writer,
-                        text,
-                        regDate
-                    } = rep;
+                    const {rno, writer, text, regDate} = rep;
 
                     tag += "<div id='replyContent' class='card-body' data-replyId='" + rno + "'>" +
                         "    <div class='row user-block'>" +
@@ -333,9 +313,9 @@
                         "       <div et-md-2 col-md-4 text-right'>";
 
                     // if (currentAccount === rep.account || auth === 'ADMIN') {
-                    tag +=
-                        "         <a id='replyModBtn' class='btn btn-sm btn-outline-dark' data-bs-toggle='modal' data-bs-target='#replyModifyModal'>수정</a>&nbsp;" +
-                        "         <a id='replyDelBtn' class='btn btn-sm btn-outline-dark' href='#'>삭제</a>";
+                        tag +=
+                            "         <a id='replyModBtn' class='btn btn-sm btn-outline-dark' data-bs-toggle='modal' data-bs-target='#replyModifyModal'>수정</a>&nbsp;" +
+                            "         <a id='replyDelBtn' class='btn btn-sm btn-outline-dark' href='#'>삭제</a>";
                     // }
                     tag += "       </div>" +
                         "    </div>" +
@@ -354,7 +334,7 @@
 
 
         // 댓글 목록 불러오기 함수 
-        function getReplyList(page = 1) {
+        function getReplyList(page=1) {
 
             fetch(`\${URL}/\${bno}/page/\${page}`)
                 .then(res => res.json())
@@ -382,10 +362,13 @@
                 if ($rt.value.trim() === '') {
                     alert('댓글 내용은 필수입니다!');
                     return;
-                } else if ($rw.value.trim() === '') {
+                }
+
+                else if ($rw.value.trim() === '') {
                     alert('댓글 작성자 이름은 필수입니다!');
                     return;
-                } else if ($rw.value.trim().length() < 2 || $rw.value.trim().length() > 8) {
+                }
+                else if ($rw.value.trim().length < 2 || $rw.value.trim().length > 8) {
                     alert('댓글 작성자 이름은 2~8자 사이로 작성하세요!');
                     return;
                 }
@@ -426,7 +409,7 @@
             };
         }
 
-        // 댓글 삭제 이벤트 처리 함수
+        // 댓글 삭제+수정모달 이벤트 처리 함수
         function replyRemoveClickEvent() {
 
             const $replyData = document.getElementById('replyData');
@@ -450,32 +433,30 @@
                         method: 'DELETE'
                     }).then(res => {
                         if (res.status === 200) {
-                            console.log('댓글이 정상 삭제됨!');
+                            alert('댓글이 정상 삭제됨!');
                             return res.json();
                         } else {
-                            console.log('댓글 삭제 실패!');
+                            alert('댓글 삭제 실패!');
                         }
                     }).then(responseResult => {
                         renderReplyList(responseResult);
                     });
 
 
-
                 } else if (e.target.matches('#replyModBtn')) {
-                    console.log('수정 화면 진입!');
+                    // console.log('수정 화면 진입!');
 
-                    //클릭한 수정 버튼 근처에 있는 텍스트 읽기
+                    // 클릭한 수정 버튼 근처에 있는 텍스트 읽기
                     const replyText = e.target.parentElement.previousElementSibling.textContent;
                     // console.log(replyText);
 
-                    //모달에 모달바디에 textarea에 읽은 텍스트를 삽입
-                    document.getElementById('modeReplyText').value = replyText;
+                    // 모달에 모달바디에 textarea에 읽은 텍스트를 삽입
+                    document.getElementById('modReplyText').value = replyText;
 
-                    //  다음 수정완료 처리를 위해 미리 
-                    // 
+                    // 다음 수정완료 처리를 위해 미리 
+                    // 수정창을 띄울 때 댓글번호를 모달에 붙여놓자
                     const $modal = document.querySelector('.modal');
                     $modal.dataset.rno = rno;
-
                 }
             };
         }
@@ -484,7 +465,7 @@
         function replyModifyClickEvent() {
 
             const $modBtn = document.getElementById('replyModBtn');
-
+            
             $modBtn.onclick = e => {
 
                 const payload = {
@@ -504,7 +485,7 @@
                 }).then(res => {
                     if (res.status === 200) {
                         alert('댓글이 정상 수정되었습니다!');
-                        //모달창 닫기
+                        // 모달창 닫기
                         document.getElementById('modal-close').click();
                         return res.json();
                     } else {
@@ -518,7 +499,7 @@
 
 
         //========= 메인 실행부 =========//
-        (function () {
+        (function() {
 
             // 첫 댓글 페이지 불러오기
             getReplyList();
@@ -529,15 +510,15 @@
             // 댓글 등록 이벤트 등록
             makeReplyRegisterClickEvent();
 
-            //삭제 이벤트 등록
+            // 삭제 이벤트 등록
             replyRemoveClickEvent();
 
             // 수정 이벤트 등록
             replyModifyClickEvent();
 
         })();
+
     </script>
 
 </body>
-
 </html>
