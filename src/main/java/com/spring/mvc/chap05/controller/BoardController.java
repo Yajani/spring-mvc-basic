@@ -1,9 +1,9 @@
 package com.spring.mvc.chap05.controller;
 
-import com.spring.mvc.chap05.dto.response.BoardListResponseDTO;
-import com.spring.mvc.chap05.dto.request.BoardWriteRequestDTO;
 import com.spring.mvc.chap05.dto.page.PageMaker;
 import com.spring.mvc.chap05.dto.page.Search;
+import com.spring.mvc.chap05.dto.request.BoardWriteRequestDTO;
+import com.spring.mvc.chap05.dto.response.BoardListResponseDTO;
 import com.spring.mvc.chap05.service.BoardService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,11 +14,12 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
-@Controller //디스패처서블릿 주입 받기
-@RequiredArgsConstructor //생성자 만들기(의존성 주입하기)
-@RequestMapping("/board") // 공동 url
+@Controller
+@RequiredArgsConstructor
+@RequestMapping("/board")
 @Slf4j
 public class BoardController {
 
@@ -27,7 +28,30 @@ public class BoardController {
 
     // 목록 조회 요청
     @GetMapping("/list")
-    public String list(Search page, Model model) {
+    public String list(
+            Search page,
+            Model model,
+            HttpServletRequest request
+    ) {
+
+        boolean flag = false;
+
+        // 세션을 확인
+        Object login
+                = request.getSession().getAttribute("login");
+
+        if (login != null) flag = true;
+
+        // 쿠키를 확인
+//        Cookie[] cookies = request.getCookies();
+//        for (Cookie c : cookies) {
+//            if (c.getName().equals("login")) {
+//                flag = true;
+//                break;
+//            }
+//        }
+        if (!flag) return "redirect:/members/sign-in";
+
         log.info("/board/list : GET");
         log.info("page : {}", page);
         List<BoardListResponseDTO> responseDTOS
@@ -36,9 +60,9 @@ public class BoardController {
         // 페이징 알고리즘 작동
         PageMaker maker = new PageMaker(page, boardService.getCount(page));
 
-        model.addAttribute("bList", responseDTOS); //JSP에게 bList란 이름으로 전달
+        model.addAttribute("bList", responseDTOS);
         model.addAttribute("maker", maker);
-        model.addAttribute("s",page);
+        model.addAttribute("s", page);
 
         return "chap05/list";
     }
@@ -53,6 +77,7 @@ public class BoardController {
     // 글 등록 요청 처리
     @PostMapping("/write")
     public String write(BoardWriteRequestDTO dto) {
+
         System.out.println("/board/write : POST");
         boardService.register(dto);
         return "redirect:/board/list";
@@ -71,7 +96,11 @@ public class BoardController {
     public String detail(int bno, @ModelAttribute("s") Search search, Model model) {
         System.out.println("/board/detail : GET");
         model.addAttribute("b", boardService.getDetail(bno));
-//        model.addAttribute("s",search);
+//        model.addAttribute("s", search);
+
+
+
+
         return "chap05/detail";
     }
 
