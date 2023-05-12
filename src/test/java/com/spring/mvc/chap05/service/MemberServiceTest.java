@@ -1,14 +1,13 @@
-package com.spring.mvc.chap04.service;
+package com.spring.mvc.chap05.service;
 
 import com.spring.mvc.chap05.dto.request.LoginRequestDTO;
 import com.spring.mvc.chap05.dto.request.SignUpRequestDTO;
-import com.spring.mvc.chap05.service.LoginResult;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
 class MemberServiceTest {

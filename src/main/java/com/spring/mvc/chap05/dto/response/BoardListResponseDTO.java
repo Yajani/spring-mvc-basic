@@ -5,11 +5,11 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
 
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 // 클라이언트에게 게시글 목록을 줄 때 스펙
-//DB에 저장된 데이터를 클라이언트에게 넘겨줄떄의 스펙
 @Getter @ToString
 @EqualsAndHashCode
 public class BoardListResponseDTO {
@@ -19,14 +19,16 @@ public class BoardListResponseDTO {
     private final String shortContent; // 30자 이상 줄임
     private final String date; // 날짜패턴 yyyy-MM-dd HH:mm
     private final int viewCount;
+    private final String account;
+
 
     public BoardListResponseDTO(Board board) {
-        //글 번호는 원본 번호 그대로 세팅
         this.boardNo = board.getBoardNo();
         this.shortTitle = makeShortTitle(board.getTitle());
         this.shortContent = makeShortContent(board.getContent());
         this.date = makePrettierDateString(board.getRegDateTime());
         this.viewCount = board.getViewCount();
+        this.account = board.getAccount();
     }
 
     static String makePrettierDateString(LocalDateTime regDateTime) {
