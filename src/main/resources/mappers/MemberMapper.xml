@@ -32,12 +32,12 @@
 
     <update id="saveAutoLogin">
         UPDATE tbl_member
-        SET session_id = #{}, limit_time = #{}
-        WHERE account = #{}
+        SET session_id = #{sessionId}, limit_time = #{limitTime}
+        WHERE account = #{account}
     </update>
 
-    <select id="findMemberbyCookie" resultType="member">
-        SELECT account, name, email, auth
+    <select id="findMemberByCookie" resultType="member">
+        SELECT account, name, email, auth, limit_time
         FROM tbl_member
         WHERE session_id = #{sessionId}
     </select>
