@@ -1,6 +1,7 @@
 package com.spring.mvc.chap05.dto.request;
 
 import lombok.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -20,5 +21,8 @@ public class SignUpRequestDTO {
     @NotBlank
     @Email
     private String email;
+
+    private MultipartFile profileImage;
+    //이름은 input태그의 name속성 !!!
 
 }
