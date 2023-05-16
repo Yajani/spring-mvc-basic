@@ -30,7 +30,7 @@ import static com.spring.mvc.util.LoginUtil.isLogin;
 @RequestMapping("/members")
 public class MemberController {
 
-    @Value("${file.upload.root-path}") //rproperties에 있는 경로 복사
+    @Value("${file.upload.root-path}")
     private String rootPath;
 
     private final MemberService memberService;
@@ -51,17 +51,12 @@ public class MemberController {
         log.info("프로필사진 이름: {}", dto.getProfileImage().getOriginalFilename());
 
         // 실제 로컬 스토리지에 파일을 업로드하는 로직
-        String savePath = FileUtil.uploadFile(dto.getProfileImage(),rootPath);
+        String savePath = FileUtil.uploadFile(dto.getProfileImage(), rootPath);
 
-        FileUtil.uploadFile(dto.getProfileImage(),rootPath);
+        boolean flag = memberService.join(dto, savePath);
 
-        boolean flag = memberService.join(dto,savePath);
-
-
-//        return "redirect:/board/list";
-        return "redirect:/memebers/sign-in";
+        return "redirect:/members/sign-in";
     }
-
 
     // 아이디, 이메일 중복검사
     // 비동기 요청 처리

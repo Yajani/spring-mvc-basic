@@ -31,7 +31,9 @@ public class MemberService {
     private final PasswordEncoder encoder;
 
     // 회원가입 처리 서비스
-    public boolean join(final SignUpRequestDTO dto, String savePath) {
+    public boolean join(
+            final SignUpRequestDTO dto,
+            final String savePath) {
 
         // dto를 entity로 변환
         Member member = Member.builder()
@@ -119,6 +121,7 @@ public class MemberService {
                 .nickName(member.getName())
                 .email(member.getEmail())
                 .auth(member.getAuth().toString())
+                .profile(member.getProfileImage())
                 .build();
         // 그 정보를 세션에 저장
         session.setAttribute(LoginUtil.LOGIN_KEY, dto);
