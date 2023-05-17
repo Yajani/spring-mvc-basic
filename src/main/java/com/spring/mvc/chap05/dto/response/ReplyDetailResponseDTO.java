@@ -18,6 +18,9 @@ public class ReplyDetailResponseDTO {
     private String text;
     private String writer;
 
+    private String account;
+    private String profile;
+
     @JsonFormat(pattern = "yyyy년 MM월 dd일 HH:mm")
     private LocalDateTime regDate;
 
@@ -27,6 +30,8 @@ public class ReplyDetailResponseDTO {
         this.text = reply.getReplyText();
         this.writer = reply.getReplyWriter();
         this.regDate = reply.getReplyDate();
+        this.account = reply.getAccount();
+        this.profile = reply.getProfileImage();
     }
 
 }
