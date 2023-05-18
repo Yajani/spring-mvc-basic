@@ -10,6 +10,8 @@ import javax.validation.constraints.Size;
 @Setter @Getter
 @ToString @EqualsAndHashCode
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class SignUpRequestDTO {
     @NotBlank //회원가입시에 필수값 설정
     private String account;

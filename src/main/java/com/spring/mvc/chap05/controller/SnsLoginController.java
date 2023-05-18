@@ -8,6 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import java.util.HashMap;
+import java.util.Map;
 
 @Controller
 @Slf4j
@@ -15,6 +16,7 @@ import java.util.HashMap;
 public class SnsLoginController {
 
     private final SnsLoginService loginService;
+
     @Value("${sns.kakao.app-key}")
     // 카카오 app key
     private String kakaoAppKey;
@@ -30,17 +32,20 @@ public class SnsLoginController {
         return "redirect:" + requestUri;
     }
 
-    //인가코듣를 받아 토큰을 요청
+    // 인가코드를 받아 토큰을 요청
     @GetMapping("/sns/kakao")
-    public String snsKakao(String code){
-        log.info("인가코드:{}",code);
+    public String snsKakao(String code) {
+        log.info("인가코드: {}", code);
 
-        //인가코드를 가지고 카카오서버에 post요청을 보내야 함 - dto로 하는 방법도 있당
-        HashMap<String, String> map = new HashMap<>();
-        map.put("applekey",kakaoAppKey);
-        map.put("redirect",kakaoRedirectURI);
-        map.put("code",code);
+        // 인가코드를 가지고 카카오서버에 post요청을 보내야 함
+        Map<String, String> map = new HashMap<>();
+        map.put("appkey", kakaoAppKey);
+        map.put("redirect", kakaoRedirectURI);
+        map.put("code", code);
+
         loginService.kakaoService(map);
+
         return "";
     }
+
 }
